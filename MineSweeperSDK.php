@@ -136,4 +136,42 @@ class MineSweeperSDK
     return $this;
   }
 
+  /**
+   * Set id for next request
+   *
+   * @param integer $id
+   * @return object
+   */
+  public function id($id) 
+  {
+    $this->namespaces[] = $id;
+    return $this;
+  }
+
+  /**
+   * Overwrites method
+   *
+   * @param string $method
+   * @return object
+   */
+  public function method($method) 
+  {
+    if (in_array(strtoupper($method), $this->httpMethods)) {
+      $this->methodOverwrite = $method;
+    }
+    return $this;
+  }
+
+  /**
+   * Makes request to server and retrieves response object
+   *
+   * @param $params
+   * @return object
+   */
+  public function params($params) 
+  {
+    $this->params = array_merge($this->params, $params);
+    return $this;
+  }
+
 }
