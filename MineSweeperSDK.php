@@ -186,4 +186,27 @@ class MineSweeperSDK
     return $this;
   }
 
+  /**
+   * Build request url with information provided
+   *
+   * @return string Request url
+   */
+  private function buildRequestUrl() 
+  {
+
+    // Build request url
+    $request = '';
+
+    if ($this->namespaces) {
+      $request .= '/'.implode('/', $this->namespaces);
+    }
+
+    // Add action if set
+    if ($this->action) {
+      $request .= '/'.$this->action;
+    }
+
+    return $request;
+  }
+
 }
