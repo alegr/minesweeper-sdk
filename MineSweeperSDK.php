@@ -323,4 +323,38 @@ class MineSweeperSDK
     $this->params = [];
   }
 
+  /**
+   * Capture non existing functions and turn it into action or http verb
+   *
+   * @param $name
+   * @param $params
+   * @return object
+   */
+  public function __call($name, $params=null) 
+  {
+
+    $url = null;
+
+    // Predefined actions
+    if (isset($this->predefinedActions[$name])) {
+      $type = $this->predefinedActions[$name];
+    }
+    else {
+      $type = empty($this->namespaces)? 'GET' : 'POST'; // Default method for actions
+      $this->namespaces[] = strtolower($name);
+    }
+
+    // Add params to params array or as part of namespace if not an array
+    if ($params) {
+      if (!is_array($params[0])) {
+        $this->namespaces[] = strtolower($params[0]);
+      }
+      else {
+        $this->params($params[0]);
+      }
+    }
+
+    return $this->execute($type, $url);
+  }
+
 }
