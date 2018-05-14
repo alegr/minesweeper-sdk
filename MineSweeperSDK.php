@@ -174,4 +174,16 @@ class MineSweeperSDK
     return $this;
   }
 
+  /**
+   * Capture non existing variables and turn it into namespace
+   *
+   * @param $name
+   * @return object
+   */
+  public function __get($namespace) 
+  {
+    $this->namespaces[] = strtolower($namespace);
+    return $this;
+  }
+
 }
