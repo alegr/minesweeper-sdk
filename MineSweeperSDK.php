@@ -228,4 +228,86 @@ class MineSweeperSDK
     ];
   }
 
+  /**
+   * Makes request to server and retrieves response object
+   *
+   * @param string $type HTTP verb (GET, POST, PUT, DELETE supported)
+   * @param string $url Request url
+   * @param array $params Parameters array if needed
+   * @return object
+   */
+  private function execute($type='GET', $url=null, $params=[]) 
+  {
+
+    if ($this->methodOverwrite) {
+      $type = $this->methodOverwrite;
+    }
+
+    $type = strtoupper($type);
+    $urlParams = '';
+
+    // Add params
+    if ($params) {
+      $this->params($params);
+    }
+
+    // No raw url, build request
+    if (!$url) {
+      $url = $this->buildRequestUrl();
+    }
+
+    // Add version if defined
+    if ($this->defaultSettings['version']) {
+      $url = 'v'.$this->defaultSettings['version'].'/'.$url;
+    }
+
+    // Build curl opts
+    $opts = $this->curl_opts;
+    if (strtoupper($type) == 'GET') {
+      $urlParams = http_build_query($this->params);
+      $url .= '?'.$urlParams;
+    }
+    else {
+      $opts[CURLOPT_POST] = true;
+      $postdata = ($this->defaultSettings['content_type'] == 'json')? json_encode($this->params) : http_build_query($this->params);
+      $opts[CURLOPT_POSTFIELDS] = $postdata;
+    }
+
+    // Add corresponding content type header
+    if (!isset($opts[CURLOPT_HTTPHEADER])) {
+      $opts[CURLOPT_HTTPHEADER] = [];
+    }
+    $opts[CURLOPT_HTTPHEADER] = array_merge(
+      $opts[CURLOPT_HTTPHEADER], 
+      ["Content-Type: ".$this->contentTypes[$this->defaultSettings['content_type']]]
+    );
+
+    $opts[CURLOPT_CUSTOMREQUEST] = strtoupper($type);
+
+    // Add API domain
+    $url = $this->defaultSettings['url'].$url;
+
+    // Set CURL options and execute curl request
+    $ch = curl_init($url);
+    if (!empty($opts)) {
+      curl_setopt_array($ch, $opts);
+    }
+    $response = json_decode(curl_exec($ch));
+    curl_close($ch);
+
+    if ($this->debug) {
+      $response = [
+        'params' => $this->params,
+        'url' => $url,
+        'postdata' => isset($postdata)? $postdata : [],
+        'method' => $type,
+        'response' => $response,
+      ];
+    }
+
+    $this->reset();
+
+    return $response;
+  }
+
 }
