@@ -14,4 +14,14 @@ class MineSweeperSDK
    */
   const VERSION  = "1.0.0";
 
+  /**
+   * @var array Default settings
+   */
+  private $defaultSettings = [
+    'url'           => "",
+    'version'       => null,
+    'language'      => 'en-En',
+    'content_type'  => 'json',
+  ];
+
 }
