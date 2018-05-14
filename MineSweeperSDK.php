@@ -30,6 +30,67 @@ class MineSweeperSDK
   private $debug = false;
 
   /**
+   * @var $curl_opts Curl options
+   */
+  public $curl_opts = [
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_USERAGENT => "MINESWEEPER-PHP-SDK-1.0.0", 
+    CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_CONNECTTIMEOUT => 10, 
+    CURLOPT_RETURNTRANSFER => 1, 
+    CURLOPT_TIMEOUT => 60,
+    CURLOPT_HTTPHEADER => [],
+  ];
+
+  /**
+   * @var array Permitted http methods
+   */
+  private $httpMethods = ['GET', 'POST', 'PUT', 'DELETE'];
+
+  /**
+   * @var array Predefined actions
+   */
+  private $predefinedActions = [
+    'get'       => 'GET',
+    'new'       => 'POST',
+    'update'    => 'PUT',
+    'destroy'   => 'DELETE',
+  ];
+
+  /**
+   * @var array Available content types
+   */
+  private $contentTypes = [
+    'form' => 'application/x-www-form-urlencoded',
+    'json' => 'application/json',
+  ];
+
+  /**
+   * @var $namespace Namespace to make the request to
+   */
+  protected $namespaces = [];
+
+  /**
+   * @var $params Stores params for next request
+   */
+  protected $params = [];
+
+  /**
+   * @var $id Stores id for next request
+   */
+  protected $id = null;
+
+  /**
+   * @var $action Action to execute for a resource
+   */
+  protected $action = null;
+
+  /**
+   * @var $methodOverwrite Manually overwrite http method
+   */
+  protected $methodOverwrite = null;
+
+  /**
    * Activate / deactivate debug response
    *
    * @param boolean $debug
