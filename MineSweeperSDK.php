@@ -91,6 +91,40 @@ class MineSweeperSDK
   protected $methodOverwrite = null;
 
   /**
+   * Constructor method. Set all variables to connect to API
+   *
+   * @param array $settings Settings to overwrite
+   * @return object
+   */
+  public function __construct($settings = null) 
+  {
+    // Store settings
+    $this->settings($settings);
+  }
+
+  /**
+   * Overwrite default settings
+   *
+   * @param array $settings Settings to overwrite
+   * @return array Current stored settigns
+   */
+  public function settings($settings=null) 
+  {
+    if ($settings) {
+      foreach ($this->defaultSettings as $keySetting => $valSetting) {
+        if (isset($settings[$keySetting])) {
+          $this->defaultSettings[$keySetting] = $settings[$keySetting];
+        }
+      }
+    }
+
+    // Add default language
+    array_push($this->curl_opts[CURLOPT_HTTPHEADER], "Accept-Language: ".$this->defaultSettings['language']);
+
+    return $this->defaultSettings;
+  }
+
+  /**
    * Activate / deactivate debug response
    *
    * @param boolean $debug
