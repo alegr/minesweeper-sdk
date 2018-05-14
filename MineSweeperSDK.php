@@ -24,4 +24,21 @@ class MineSweeperSDK
     'content_type'  => 'json',
   ];
 
+  /**
+   * @var boolean Include debug information in response
+   */
+  private $debug = false;
+
+  /**
+   * Activate / deactivate debug response
+   *
+   * @param boolean $debug
+   * @return object $this
+   */
+  public function debug($debug=true) 
+  {
+    $this->debug = (bool)$debug;
+    return $this;
+  }
+
 }
