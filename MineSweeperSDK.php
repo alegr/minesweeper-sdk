@@ -310,4 +310,17 @@ class MineSweeperSDK
     return $response;
   }
 
+  /**
+   * Reset variables for a clean new request
+   *
+   */
+  private function reset() 
+  {
+    $this->namespaces = [];
+    $this->id = null;
+    $this->action = null;
+    $this->methodOverwrite = null;
+    $this->params = [];
+  }
+
 }
