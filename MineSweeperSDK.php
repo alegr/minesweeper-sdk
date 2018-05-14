@@ -209,4 +209,23 @@ class MineSweeperSDK
     return $request;
   }
 
+  /**
+   * Creates error object to return
+   *
+   * @param $message
+   * @param $code HTTP error code
+   * @return object
+   */
+  private function error($message='Invalid request', $code=400) 
+  {
+    return [
+      'success' => false,
+      'error' => [
+        'status' => $code,
+        'type' => 'Bad Request',
+        'userMessage' => $message,
+      ]
+    ];
+  }
+
 }
